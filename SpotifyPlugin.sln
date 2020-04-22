@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyPlugin", "TS3SpotifyPlugin\SpotifyPlugin.csproj", "{9EA2536D-DE1E-4414-98B7-13A9928E5E66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TS3AudioBot", "TS3AudioBot\TS3AudioBot\TS3AudioBot.csproj", "{A4B11B97-AEC4-4438-B354-C5A98706C06C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TSLib", "TS3AudioBot\TSLib\TSLib.csproj", "{35B68BF1-80FC-4C03-BD12-274B4C938508}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EA2536D-DE1E-4414-98B7-13A9928E5E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA2536D-DE1E-4414-98B7-13A9928E5E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA2536D-DE1E-4414-98B7-13A9928E5E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA2536D-DE1E-4414-98B7-13A9928E5E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4B11B97-AEC4-4438-B354-C5A98706C06C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4B11B97-AEC4-4438-B354-C5A98706C06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4B11B97-AEC4-4438-B354-C5A98706C06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4B11B97-AEC4-4438-B354-C5A98706C06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35B68BF1-80FC-4C03-BD12-274B4C938508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35B68BF1-80FC-4C03-BD12-274B4C938508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35B68BF1-80FC-4C03-BD12-274B4C938508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35B68BF1-80FC-4C03-BD12-274B4C938508}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E6D9128-2176-4040-B7CC-3DEDAE6880FB}
+	EndGlobalSection
+EndGlobal

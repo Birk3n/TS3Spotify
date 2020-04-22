@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <StartupObject></StartupObject>
+    <ApplicationIcon />
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="1.9.0" />
+    <PackageReference Include="SpotifyAPI.Web" Version="4.2.2" />
+    <PackageReference Include="SpotifyAPI.Web.Auth" Version="4.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="PluginFiles\SpotifyCommand.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="PluginFiles\SpotifyStreamAudioProducer.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TS3AudioBot\TS3AudioBot\TS3AudioBot.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir $(TargetDir)build&#xD;&#xA;mkdir $(TargetDir)build\lib&#xD;&#xA;copy $(ProjectDir)lib\NAudio.dll $(TargetDir)build\lib\NAudio.dll&#xD;&#xA;copy $(ProjectDir)lib\SpotifyAPI.Web.Auth.dll $(TargetDir)build\lib\SpotifyAPI.Web.Auth.dll&#xD;&#xA;copy $(ProjectDir)lib\SpotifyAPI.Web.dll $(TargetDir)build\lib\SpotifyAPI.Web.dll&#xD;&#xA;&#xD;&#xA;copy $(TargetDir)SpotifyPlugin.dll $(TargetDir)build\SpotifyPlugin.dll&#xD;&#xA;copy $(TargetDir)SpotifyPlugin.pdb $(TargetDir)build\SpotifyPlugin.pdb&#xD;&#xA;" />
+  </Target>
+
+</Project>
