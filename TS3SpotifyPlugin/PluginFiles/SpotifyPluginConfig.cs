@@ -39,6 +39,8 @@ public class SpotifyPluginConfig
 	public string librespotPath { get; set; } = "librespot";
     public string clientId { get; set; } = "";
     public string clientSecret { get; set; } = "";
+
+    public string returnUrl { get; set; } = "";
     public List<SpotifyAccount> accountList { get; set; } = new List<SpotifyAccount>();
 
 

@@ -104,6 +104,29 @@ public class SpotifyCommand : IBotPlugin
     {
         SpotifyAccount account = spotifyPluginConfig.getAccount(invoker.ClientUid.Value);
 
+        bool cancel = false;
+        if(spotifyPluginConfig.returnUrl.Length < 10)
+        {
+            Ts3Client.SendMessage("Return-URL is not set", invoker.ClientId.Value);
+            cancel = true;
+        }
+        if(spotifyPluginConfig.clientSecret.Length < 10)
+        {
+            Ts3Client.SendMessage("clientSecret is not set", invoker.ClientId.Value);
+            cancel = true;
+        }
+        if (spotifyPluginConfig.clientId.Length < 10)
+        {
+            Ts3Client.SendMessage("clientId is not set", invoker.ClientId.Value);
+            cancel = true;
+        }
+
+        if(cancel == true)
+        {
+            Ts3Client.SendMessage("aborting", invoker.ClientId.Value);
+            return;
+        }
+
         if (account.Exists())
         {
             CommandSpotifyAccount(invoker);
@@ -706,27 +729,37 @@ public class SpotifyCommand : IBotPlugin
 		public void startProcess()
 		{
             started = true;
-            Console.WriteLine("Starting with {0}", args);
-			instance = new Process
-			{
-				StartInfo = new ProcessStartInfo
-				{
-					FileName = filePath,
-					Arguments = args,
-					RedirectStandardOutput = true,
-					RedirectStandardInput = true,
-					RedirectStandardError = true,
-					UseShellExecute = false,
-					CreateNoWindow = true,
-				},
-				EnableRaisingEvents = true,
-			};
+            //Console.WriteLine("Starting with {0}", args);
+            try
+            {
 
-			instance.ErrorDataReceived += (s, e) => outputData(e.Data);
 
-			instance.Start();
-			instance.BeginErrorReadLine();
-		}
+			    instance = new Process
+			    {
+				    StartInfo = new ProcessStartInfo
+				    {
+					    FileName = filePath,
+					    Arguments = args,
+					    RedirectStandardOutput = true,
+					    RedirectStandardInput = true,
+					    RedirectStandardError = true,
+					    UseShellExecute = false,
+					    CreateNoWindow = true,
+				    },
+				    EnableRaisingEvents = true,
+			    };
+
+			    instance.ErrorDataReceived += (s, e) => outputData(e.Data);
+
+			    instance.Start();
+			    instance.BeginErrorReadLine();
+            }
+            catch(Exception ex)
+            {
+                
+            }
+
+        }
 		private void outputData(string data)
 		{
 			if (String.IsNullOrEmpty(data)) return;

@@ -54,14 +54,7 @@ public class SpotifyControl
     }
 	public void firstTimeLogin(Action<string> callback)
 	{
-
-        AuthorizationCodeAuth auth = new AuthorizationCodeAuth(
-            _spotifyConfig.clientId,
-            _spotifyConfig.clientSecret,
-            "http://localhost:4002",
-            "http://localhost:4002",
-            (Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying)
-        );
+        AuthorizationCodeAuth auth = getAuth();
         callback(auth.GetUri());
 	}
     private AuthorizationCodeAuth getAuth()
@@ -69,8 +62,8 @@ public class SpotifyControl
         AuthorizationCodeAuth auth = new AuthorizationCodeAuth(
             _spotifyConfig.clientId,
             _spotifyConfig.clientSecret,
-            "http://localhost:4002",
-            "http://localhost:4002",
+            _spotifyConfig.returnUrl,
+            _spotifyConfig.returnUrl,
             (Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying)
         );
         return auth;
