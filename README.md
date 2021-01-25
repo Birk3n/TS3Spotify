@@ -23,6 +23,7 @@
  librespotPath = "../../../../../../path/to/librespot.exe" #starts where your ts3audiobot is
  clientId = "your-client"
  clientSecret = "your-secret"
+ returnUrl = "http://your-developer-website.com"
 ```
 
 ## Spotify Client ID ##
