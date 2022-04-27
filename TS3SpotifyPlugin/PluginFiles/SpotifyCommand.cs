@@ -513,8 +513,10 @@ public class SpotifyCommand : IBotPlugin
                 //Starting a Task bc WaitForConnection blocks execution
 
                 var stream = new NamedPipeServerStream(spotifyPluginConfig.getPipeName(), PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.None);
-                stream.WaitForConnection();
+                
                 producer = new SpotifyStreamAudioProducer(stream, player, rootConf);
+                stream.WaitForConnection();
+
             });
 
 
@@ -549,21 +551,33 @@ public class SpotifyCommand : IBotPlugin
 
         targetManager.SendMode = TargetSendMode.Voice;
 
+        tries = 0;
+        while (producer == null && tries++ < 10)
+        {
+            informChannel(Ts3Client, "Waiting for NamedPipe");
+            Thread.Sleep(1000);
+        }
+        if (producer == null) return false;
         producer.start();
         return true;
     }
     [Command("spotify play")]
-	public string commandSpotifyPlay(ClientCall invoker, IVoiceTarget targetManager, string id)
+	public string commandSpotifyPlay(ClientCall invoker, IVoiceTarget targetManager)
 	{
 		if (!spotifyPluginConfig.librespotExists()) return "Please check Librespot-Path";
 
-        if (id == "") return "nothing given.";
+        /* if(!checkControlAvailable(invoker)) {
+             return "SpotifyControl error.";
+         }*/
+        SpotifyAccount account = spotifyPluginConfig.getAccount(invoker.ClientUid.Value);
+        if (!account.Exists())
+        {
+            return "Spotify-Account not found!";
+        }
 
-       /* if(!checkControlAvailable(invoker)) {
-            return "SpotifyControl error.";
-        }*/
-
-        if(spotifyInstance == null)
+        activeSpotifyAccount = account;
+        
+        if (spotifyInstance == null)
         {
             bool producerStarted = startProducer(targetManager);
 
@@ -571,6 +585,8 @@ public class SpotifyCommand : IBotPlugin
             {
                 return "Librespot error.";
             }
+
+            return "Start your Music in Spotify-App";
         }  
 
         //changeMusic(id);
@@ -735,7 +751,7 @@ public class SpotifyCommand : IBotPlugin
 		public void startProcess()
 		{
             started = true;
-            //Console.WriteLine("Starting with {0}", args);
+            Console.WriteLine("Starting with {0}", args);
             try
             {
 

@@ -47,6 +47,7 @@ public class SpotifyStreamAudioProducer : IPlayerSource, IDisposable
         if (resampler == null)
         {
             var dll = Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.dll"));
+            Assembly.LoadFrom(Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.Core.dll")));
             resampler = new Resampler(Assembly.LoadFrom(dll));
         }
     }
