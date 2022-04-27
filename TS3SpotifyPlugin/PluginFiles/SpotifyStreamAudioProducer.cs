@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using TSLib.Audio;
 using TS3AudioBot.Audio;
 using NAudio.Wave;
@@ -14,9 +15,10 @@ public class SpotifyStreamAudioProducer : IPlayerSource, IDisposable
 {
     public event EventHandler OnSongEnd;
     public event EventHandler<SongInfoChanged> OnSongUpdated;
-    public TimeSpan Length { get; }
-    public TimeSpan Position { get; set; }
+    public TimeSpan? Length { get; }
+    public TimeSpan? Position { get; set; }
 
+    public Task Seek(TimeSpan position) { return Task.CompletedTask; }
 
     private readonly Stream stream;
 

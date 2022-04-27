@@ -5,7 +5,7 @@
     <StartupObject>
     </StartupObject>
     <ApplicationIcon />
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -13,7 +13,12 @@
     <OldToolsVersion>Current</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NAudio" Version="1.9.0" />
+    <Compile Remove="PluginFiles\SpotifyControl.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.0.1">
+      <GeneratePathProperty></GeneratePathProperty>
+    </PackageReference>
     <PackageReference Include="SpotifyAPI.Web" Version="4.2.2" />
     <PackageReference Include="SpotifyAPI.Web.Auth" Version="4.2.2" />
   </ItemGroup>
@@ -27,6 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PluginFiles\SpotifyControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TS3AudioBot\TS3AudioBot\TS3AudioBot.csproj" />
