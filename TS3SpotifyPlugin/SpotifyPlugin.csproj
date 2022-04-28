@@ -40,6 +40,6 @@
     <ProjectReference Include="..\TS3AudioBot\TS3AudioBot\TS3AudioBot.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir $(TargetDir)build&#xD;&#xA;mkdir $(TargetDir)build\lib&#xD;&#xA;copy $(ProjectDir)lib\NAudio.dll $(TargetDir)build\lib\NAudio.dll&#xD;&#xA;copy $(ProjectDir)lib\SpotifyAPI.Web.Auth.dll $(TargetDir)build\lib\SpotifyAPI.Web.Auth.dll&#xD;&#xA;copy $(ProjectDir)lib\SpotifyAPI.Web.dll $(TargetDir)build\lib\SpotifyAPI.Web.dll&#xD;&#xA;&#xD;&#xA;copy $(TargetDir)SpotifyPlugin.dll $(TargetDir)build\SpotifyPlugin.dll&#xD;&#xA;copy $(TargetDir)SpotifyPlugin.pdb $(TargetDir)build\SpotifyPlugin.pdb&#xD;&#xA;" />
+    <Exec Command="mkdir $(TargetDir)plugins&#xD;&#xA;mkdir $(TargetDir)plugins\lib&#xD;&#xA;copy $(TargetDir)NAudio.* $(TargetDir)plugins\lib\.&#xD;&#xA;copy $(TargetDir)SpotifyPlugin.dll $(TargetDir)plugins\SpotifyPlugin.dll&#xD;&#xA;copy $(TargetDir)SpotifyPlugin.pdb $(TargetDir)plugins\SpotifyPlugin.pdb&#xD;&#xA;" />
   </Target>
 </Project>

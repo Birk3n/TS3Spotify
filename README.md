@@ -2,42 +2,37 @@
 
 ## Features
 * Only works with Spotify-Premium!
-* Can play Music from Spotify Windows / Linux
+* Can play Music from Spotify ~~Windows~~ / Linux
 
 ## Commands ##
-* !spotify play < id >: Start the Playlist / Album
-* !spotify next (steps): Next song
-* !spotify shuffle: show shuffle status
-* !spotify shuffle < on|off >: toggle shuffle
-* !spotify search < "param" >: Search 
+* !spotify play: Starts the Spotify-Device
+* !spotify stop: Stops the Spotify-Device
 
 
 ## Checkout
 * git clone --recurse-submodules https://github.com/Birk3n/TS3Spotify.git
 * Get and build librespot (https://github.com/librespot-org/librespot)
-* Add to your Bot-Config 
+* Add to Bot-Config (bot.toml)
 ```
  [spotify]
- deviceName = "TS3AudioBot"
- pipelineName = "TS3AudioBotFifo"
- librespotPath = "../../../../../../path/to/librespot.exe" #starts where your ts3audiobot is
- clientId = "your-client"
- clientSecret = "your-secret"
- returnUrl = "http://your-developer-website.com"
+ librespotPath = "/absolut/path/to/librespot"
 ```
+* `dotnet build --framework netcoreapp3.1 --configuration Release TS3SpotifyPlugin`
+* copy `.\TS3SpotifyPlugin\bin\Release\netcoreapp3.1\plugins` to your bot
+* !plugin load {id}
 
-## Spotify Client ID ##
-* Login in https://developer.spotify.com/dashboard/
-* Create a client id
-* Fill Name, Description and other info. 
-* Get the Client-ID and Secret-ID from your Spotify-Application
+* !spotify account add (if not already) => write mail + password to **TS3AudioBot private chat** (beware! Password is in plaintext in logs!)
 
-## How to use ##
-* Type !spotify account
-* Go to privat chat and type !spotify account add
-* Keep the stuff in privat chat!
-* Use the Link, login to spotify and get the auth-token from the get-param
-* Paste it into chat
-* Write your mail in privat chat!
-* Write your password in privat chat!
-* Have fun!
+## Stuff
+```
+System.IO.FileNotFoundException: Could not load file or assembly 'TS3AudioBot, Version=0.12.3.0, Culture=neutral, PublicKeyToken=null'. The system cannot find the file specified.
+```
+Make sure to use the right version of TS3AudioBot. The Buildversion of plugin and bot must match!
+
+```
+Librespot error.
+```
+Something is wrong with librespot. If are already logged in you can start librespot from cli:
+`mkfifo /tmp/TS3AudioBotFifo
+/path/librespot -b 160 --enable-volume-normalisation --initial-volume 100 --backend pipe -n TS3AudioBot -c "/opt/ts3bot/bot/plugins/lib/**YOUR_SPOTIFY_ID**" --device /tmp/TS3AudioBotFifo`
+it should say something to you.

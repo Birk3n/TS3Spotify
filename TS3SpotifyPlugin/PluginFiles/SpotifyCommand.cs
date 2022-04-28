@@ -91,7 +91,6 @@ public class SpotifyCommand : IBotPlugin
         {
             accountInformation += "Your Accountinformation:\n\n";
             accountInformation += "Your E-Mail: " + account.email + "\n";
-            accountInformation += "Your Code: " + account.code + "\n";
 
         } else
         {
@@ -103,29 +102,6 @@ public class SpotifyCommand : IBotPlugin
     public void CommandSpotifyAccountAdd(ClientCall invoker)
     {
         SpotifyAccount account = spotifyPluginConfig.getAccount(invoker.ClientUid.Value);
-
-        bool cancel = false;
-        if(spotifyPluginConfig.returnUrl.Length < 10)
-        {
-            Ts3Client.SendMessage("Return-URL is not set", invoker.ClientId.Value);
-            cancel = true;
-        }
-        if(spotifyPluginConfig.clientSecret.Length < 10)
-        {
-            Ts3Client.SendMessage("clientSecret is not set", invoker.ClientId.Value);
-            cancel = true;
-        }
-        if (spotifyPluginConfig.clientId.Length < 10)
-        {
-            Ts3Client.SendMessage("clientId is not set", invoker.ClientId.Value);
-            cancel = true;
-        }
-
-        if(cancel == true)
-        {
-            Ts3Client.SendMessage("aborting", invoker.ClientId.Value);
-            return;
-        }
 
         if (account.Exists())
         {
@@ -139,26 +115,6 @@ public class SpotifyCommand : IBotPlugin
             LoginStepTwo(account, invoker);
         }
     }
-   /* [Command("spotify account edit")]
-    public string CommandSpotifyAccountEdit(ClientCall invoker, string property)
-    {
-        SpotifyAccount account = spotifyPluginConfig.getAccount(invoker.ClientUid.Value);
-
-        if(!account.Exists()) return "No account found.";
-
-        property = property.ToLower();
-
-        if (property == "pass" || property == "password" || property == "passwort") {
-            LoginStepThree(account, invoker); //follow it, we dont store passwords
-        } else if (property == "auth") {
-            LoginStepOne(account, invoker);
-        } else {
-            return "Not found.";
-        }
-
-        return "";
-        
-    }*/
     [Command("spotify account delete")]
     public string CommandSpotifyAccountDelete(ClientCall invoker)
     {
@@ -178,29 +134,6 @@ public class SpotifyCommand : IBotPlugin
     }
     #endregion
     #region loginSteps
-    /*public void LoginStepOne(SpotifyAccount account, ClientCall invoker) {
-        //get Auth-Key
-        account.id = invoker.ClientUid.Value;
-        var newControl = new SpotifyControl(spotifyPluginConfig, rootConf);
-        newControl.firstTimeLogin((link) =>
-        {
-            string information = "";
-            information += "Grant rights and place the code from GET-Param into this chat.";
-            Ts3Client.SendMessage(information, invoker.ClientId.Value);
-            Ts3Client.SendMessage(link, invoker.ClientId.Value);
-
-            async Task handler(object sender, TextMessage textMessage)
-            {
-                if (textMessage.InvokerId == invoker.ClientId) {
-                    account.code = textMessage.Message.ToString();
-                    Ts3Client.OnMessageReceived -= handler;
-                    LoginStepTwo(account, invoker);
-                }
-            };
-
-            Ts3Client.OnMessageReceived += handler;
-        });
-    }*/
     public void LoginStepTwo(SpotifyAccount account, ClientCall invoker) {
         //get Email
         string information = "";
@@ -269,142 +202,10 @@ public class SpotifyCommand : IBotPlugin
         spotifyPluginConfig.accountList.Add(account);
         saveConfig();
 
-        /*
-        SpotifyControl newControl = new SpotifyControl(spotifyPluginConfig, rootConf);
-
-        newControl.logintoken(account.code, (bool success, bool tell, string accessToken, string refreshToken) =>
-        {
-            if (success)
-            {
-                account.refreshToken = refreshToken;
-                account.accessToken = accessToken;
-
-                spotifyPluginConfig.accountList.Add(account);
-                saveConfig();
-
-                Ts3Client.SendMessage("You can use Spotify now.", invoker.ClientId.Value);
-            }
-            else
-            {
-                Ts3Client.SendMessage("Something went wrong check your Auth-Token.", invoker.ClientId.Value);
-            }
-        });*/
 
     }
-    #endregion
+    #endregion loginSteps
     #region spotifyControl commands (search, next, song, changeSong usw)
-    [Command("spotify search")]
-    public string CommandSpotifySearchDefault()
-    {
-        string ret = "";
-        ret += "\n!spotify search \"string\" => searching for Albums";
-        ret += "\n!spotify search playlist \"string\" => searching for playlist";
-        ret += "\n!spotify search pl \"string\" => searching for playlist";
-        return ret;
-    }
-    /*[Command("spotify search")]
-    public void CommandSpotifySearch(ClientCall invoker, string content)
-    {
-        if (!checkControlAvailable(invoker)) return;
-
-        lock(_lock)
-        {
-            activeSpotifyControl.searchAlbum(content, (string ret) => {
-                informChannel(Ts3Client, ret);
-            });
-            activeSpotifyControl.searchPlaylist(content, (string ret) => {
-                informChannel(Ts3Client, ret);
-            });
-        }
-    }*/
-   /* [Command("spotify search")]
-    public void CommandSpotifySearch(ClientCall invoker, string type, string content)
-    {
-        if (!checkControlAvailable(invoker)) return;
-
-        if (type == "playlist" || type == "pl")
-        {
-            lock (_lock)
-            {
-                activeSpotifyControl.searchPlaylist(content, (string ret) =>
-                {
-                    informChannel(Ts3Client, ret);
-                });
-            }
-        } else if (type == "album" )
-        {
-            lock (_lock)
-            {
-                activeSpotifyControl.searchAlbum(content, (string ret) =>
-                {
-                    informChannel(Ts3Client, ret);
-                });
-            }
-        }
-        else
-        {
-            informChannel(Ts3Client, "No search command found");
-        }
-
-    }*/
-    
-   
-  /*  [Command("spotify list")]
-    //[Usage()]
-    public void CommandSpotifyList(ClientCall invoker)
-    {
-        if (!checkControlAvailable(invoker)) return;
-        lock (_lock)
-        {
-            activeSpotifyControl.getList((string ret) => informChannel(Ts3Client, ret));
-        }
-    }*/
-    /*[Command("spotify next")]
-    public void CommandSpotifyNextSingle(ClientCall invokert) => CommandSpotifyNext(invokert, 1);
-    */
-   /* [Command("spotify next")]
-    public void CommandSpotifyNext(ClientCall invoker, int count)
-    {
-        if (!checkControlAvailable(invoker)) return;
-        lock (_lock)
-        {
-            activeSpotifyControl.nextTitle((string ret) => informChannel(Ts3Client, ret), count);
-        }
-    }*/
-   /* [Command("spotify prev")]
-    public void CommandSpotifyPrev(ClientCall invoker)
-    {
-        if (!checkControlAvailable(invoker)) return;
-        lock (_lock)
-        {
-            activeSpotifyControl.prevTitle((string ret) => informChannel(Ts3Client, ret));
-        }
-    }*/
-    /*[Command("spotify shuffle")]
-    public void CommandSpotifyShuffle(ClientCall invoker)
-    {
-        if (!checkControlAvailable(invoker)) return;
-        informChannel(Ts3Client, "Shuffle is " + (activeSpotifyControl.shuffle ? "on" : "off") );
-    }*/
-    /*[Command("spotify shuffle")]
-    public void CommandSpotifyShuffle(ClientCall invoker, string shuffleMode)
-    {
-        if (!checkControlAvailable(invoker)) return;
-        lock (_lock)
-        {
-            activeSpotifyControl.setShuffle(shuffleMode == "on", (string ret) => informChannel(Ts3Client, ret));
-        }
-    }*/
-
-    /*[Command("spotify song")]
-    public void CommandSpotifySong(ClientCall invoker)
-    {
-        if (!checkControlAvailable(invoker)) return;
-        lock (_lock)
-        {
-            activeSpotifyControl.currentSong((string ret) => informChannel(Ts3Client, ret));
-        }
-    }*/
     [Command("spotify check")]
     public void CommandSpotifyCheck(ClientCall invoker)
     {
@@ -414,9 +215,6 @@ public class SpotifyCommand : IBotPlugin
         if (spotifyPluginConfig.deviceName.Length <= 0) informChannel(Ts3Client, "librespot_device_name empty");
         if (spotifyPluginConfig.getPipeName().Length <= 0) informChannel(Ts3Client, "librespot_pipeline_name empty");
        
-        if (spotifyPluginConfig.clientId.Length <= 0) informChannel(Ts3Client, "spotify_client_id empty");
-        if (spotifyPluginConfig.clientSecret.Length <= 0) informChannel(Ts3Client, "spotify_client_secret empty");
-
         if (spotifyInstance == null)
             informChannel(Ts3Client, "spotifyInstance is null");
         else
@@ -427,80 +225,14 @@ public class SpotifyCommand : IBotPlugin
 
         informChannel(Ts3Client, "producer is " + ((producer == null) ? "null" : "here"));
     }
-   /* [Command("spotify track")]
-    public void commandSpotifyTrack(ClientCall invoker, string userString) => changeMusic(userString, "track");*/
-
-    /*[Command("spotify album")]
-    public void commandSpotifyAlbum(ClientCall invoker, string userString) => changeMusic(userString, "album");*/
-
-   /* [Command("spotify playlist")]
-    public void commandSpotifyPlaylist(ClientCall invoker, string userString) => changeMusic(userString, "playlist");*/
-
-   /* private void changeMusic(string userString, string type = "")
-    {
-        lock (_lock)
-        {
-            if (type != "")
-            {
-                activeSpotifyControl.change(type.ToLower(), userString);
-            }
-            else if (activeSpotifyControl.isAlbum(userString))
-            {
-                activeSpotifyControl.change("album", userString);
-            }
-            else if (activeSpotifyControl.isPlaylist(userString))
-            {
-                activeSpotifyControl.change("playlist", userString);
-            }
-            else
-            {
-                informChannel(Ts3Client, "No Album/Playlist found");
-            }
-        }
-    }*/
 
     [Command("spotify stop")]
     public void commandSpotifyStop(ClientCall invoker)
     {
-       /* lock (_lock)
-        {
-            if (checkControlAvailable(invoker)) activeSpotifyControl.stop();
-        }*/
          stopSpotify();
     }
     #endregion
 
-   /* private bool checkControlAvailable(ClientCall invoker)
-    {
-        if (activeSpotifyControl != null && activeSpotifyControl.hasInit()) return true;
-
-
-        return _startControl(invoker);
-    }*/
-   /* public bool _startControl(ClientCall invoker) {
-        if (activeSpotifyAccount != null) return false;
-        SpotifyAccount account = spotifyPluginConfig.getAccount(invoker.ClientUid.Value);
-        if(!account.Exists())
-        {
-            return false;
-        }
-        SpotifyControl tempControl = new SpotifyControl(spotifyPluginConfig, rootConf);
-
-        tempControl._refreshtoken(account.refreshToken).Wait();
-
-        if(!tempControl.hasInit()) {
-            return false;
-        }
-
-        activeSpotifyAccount = account;
-        activeSpotifyAccount.setClient(invoker.ClientId.ToString());
-
-
-        activeSpotifyControl = tempControl;
-        activeSpotifyControl.setTimer(activeSpotifyAccount.refreshToken);
-
-        return true;
-    }  */
     public bool startProducer(IVoiceTarget targetManager)
     {
 
@@ -508,14 +240,14 @@ public class SpotifyCommand : IBotPlugin
         {
             informChannel(Ts3Client, "Windows Version");
 
+
+            // Winwdows currently not working 
             Task.Factory.StartNew(() =>
             {
                 //Starting a Task bc WaitForConnection blocks execution
-
                 var stream = new NamedPipeServerStream(spotifyPluginConfig.getPipeName(), PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.None);
-                
-                producer = new SpotifyStreamAudioProducer(stream, player, rootConf);
                 stream.WaitForConnection();
+                producer = new SpotifyStreamAudioProducer(stream, player, rootConf);
 
             });
 
@@ -557,8 +289,11 @@ public class SpotifyCommand : IBotPlugin
             informChannel(Ts3Client, "Waiting for NamedPipe");
             Thread.Sleep(1000);
         }
+
         if (producer == null) return false;
+
         producer.start();
+
         return true;
     }
     [Command("spotify play")]
@@ -566,10 +301,8 @@ public class SpotifyCommand : IBotPlugin
 	{
 		if (!spotifyPluginConfig.librespotExists()) return "Please check Librespot-Path";
 
-        /* if(!checkControlAvailable(invoker)) {
-             return "SpotifyControl error.";
-         }*/
         SpotifyAccount account = spotifyPluginConfig.getAccount(invoker.ClientUid.Value);
+
         if (!account.Exists())
         {
             return "Spotify-Account not found!";
@@ -588,8 +321,6 @@ public class SpotifyCommand : IBotPlugin
 
             return "Start your Music in Spotify-App";
         }  
-
-        //changeMusic(id);
 
         return "";
 	}
@@ -652,7 +383,6 @@ public class SpotifyCommand : IBotPlugin
             producer?.Dispose();
             producer = null;
             spotifyInstance = null;
-            //activeSpotifyControl = null;
             activeSpotifyAccount = null;
         }
     }
