@@ -8,14 +8,14 @@ using TS3AudioBot;
 
 public class SpotifyAccount
 {
-    public string id { get; set; } = "";
+    public string tsClientUniqueId { get; set; } = "";
     public string email { get; set; } = "";
     //public string password { get; set; } = "";
-    public string username { get; set; } = "";
+
     private string clientId;
     public bool Exists()
     {
-        if (this.id != "") return true;
+        if (this.tsClientUniqueId != "") return true;
 
         return false;
     }
@@ -44,11 +44,11 @@ public class SpotifyPluginConfig
 		return File.Exists(librespotPath);
 	}
 
-    public SpotifyAccount getAccount(string clientUid)
+    public SpotifyAccount getAccount(string tsClientUniqueId)
     {
         for(int i = 0; i < accountList.Count; i++)
         {
-            if (accountList[i].id == clientUid) return accountList[i];
+            if (accountList[i].tsClientUniqueId == tsClientUniqueId) return accountList[i];
         }
 
         return new SpotifyAccount();

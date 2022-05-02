@@ -69,11 +69,11 @@ public class SpotifyCommand : IBotPlugin
     }
     public void StopSpotifyOnLeave(object sender, ClientLeftView ev)
     {
-        string id = ev.ClientId.ToString();
-        if(activeSpotifyAccount != null && activeSpotifyAccount.getClient() == id)
+        string clientId = ev.ClientId.ToString();
+        if(activeSpotifyAccount != null && activeSpotifyAccount.getClient() == clientId)
         {
             stopSpotify();
-            info("User " + ev.ClientId.Value + " ("+id+") disconnected");
+            info("User " + ev.ClientId.Value + " ("+ clientId + ") disconnected");
         }
     }
 
@@ -111,7 +111,6 @@ public class SpotifyCommand : IBotPlugin
         {
             string information = "Follow instructions";
             Ts3Client.SendMessage(information, invoker.ClientId.Value);
-            //LoginStepOne(account, invoker);
             LoginStepTwo(account, invoker);
         }
     }
@@ -197,12 +196,16 @@ public class SpotifyCommand : IBotPlugin
         {
             Ts3Client.SendMessage("Credentials not right.", invoker.ClientId.Value);
             return;
+        } else {
+            Ts3Client.SendMessage("Everything seems right.", invoker.ClientId.Value);
+            newInstance.stopProcess();
         }
 
+        account.tsClientUniqueId = invoker.ClientUid.Value;
+
         spotifyPluginConfig.accountList.Add(account);
-        saveConfig();
 
-
+        saveConfig();        
     }
     #endregion loginSteps
     #region spotifyControl commands (search, next, song, changeSong usw)
@@ -318,6 +321,8 @@ public class SpotifyCommand : IBotPlugin
             {
                 return "Librespot error.";
             }
+
+            activeSpotifyAccount.setClient(invoker.ClientId.ToString());
 
             return "Start your Music in Spotify-App";
         }  
@@ -442,7 +447,7 @@ public class SpotifyCommand : IBotPlugin
             var file =  new System.IO.FileInfo(config.librespotPath);
             filePath =  file.FullName;
 
-            args += " -c \"" + Path.Combine(file.DirectoryName, Regex.Replace(account.id, "[^a-zA-Z0-9]", "")) + "\"";
+            args += " -c \"" + Path.Combine(file.DirectoryName, Regex.Replace(account.tsClientUniqueId, "[^a-zA-Z0-9]", "")) + "\"";
             if (OperatingSystem.IsWindows())
             {
                 args += " --device \"\\\\.\\pipe\\" + config.getPipeName() + "\"";

@@ -33,9 +33,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PluginFiles\SpotifyControl.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\TS3AudioBot\TS3AudioBot\TS3AudioBot.csproj" />
   </ItemGroup>
   <ItemGroup>
