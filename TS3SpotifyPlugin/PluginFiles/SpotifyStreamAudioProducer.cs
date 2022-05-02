@@ -46,9 +46,11 @@ public class SpotifyStreamAudioProducer : IPlayerSource, IDisposable
 
         if (resampler == null)
         {
-            var dll = Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.dll"));
-            Assembly.LoadFrom(Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.Core.dll")));
-            resampler = new Resampler(Assembly.LoadFrom(dll));
+            /*Assembly.LoadFrom(Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.Core.dll")));
+            Assembly.LoadFrom(Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.WinMM.dll")));*/
+            Assembly.LoadFrom(Path.GetFullPath(Path.Combine(config.Plugins.Path.Value, "lib", "NAudio.dll")));
+
+            resampler = new Resampler();
         }
     }
     public int Read(byte[] buffer, int offset, int length, out Meta meta)
@@ -85,7 +87,8 @@ public class SpotifyStreamAudioProducer : IPlayerSource, IDisposable
     public void ReadLoop()
     {
         int read = 0;
-        int initialLength = 176400;
+        //int initialLength = 176400;
+        int initialLength = 819200;
         int length = initialLength;
         byte[] completeBuffer = new byte[initialLength];
 
@@ -193,14 +196,12 @@ public class SpotifyStreamAudioProducer : IPlayerSource, IDisposable
     private class Resampler
     {
         private bool isWindows;
-        private Assembly NAudio;
         WaveFormat oldFormat = new WaveFormat(44100, 16, 2);
         WaveFormat newFormat = new WaveFormat(48000, 16, 2);
         public bool doResample = true;
 
-        public Resampler(Assembly NAudio)
+        public Resampler()
         {
-            this.NAudio = NAudio;
             //isWindows = OperatingSystem.IsWindows();
             isWindows = false;
         }

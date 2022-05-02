@@ -17,7 +17,7 @@
     <Compile Remove="PluginFiles\SpotifyControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NAudio" Version="2.0.1">
+    <PackageReference Include="NAudio" Version="1.9.0">
       <GeneratePathProperty></GeneratePathProperty>
     </PackageReference>
   </ItemGroup>
@@ -36,14 +36,10 @@
     <ProjectReference Include="..\TS3AudioBot\TS3AudioBot\TS3AudioBot.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <NAudioFiles Include="$(TargetDir)NAudio.*" />
+    <NAudioFiles Include="$(TargetDir)NAudio*" />
   </ItemGroup>
   <Target Name="CopyDLLs" AfterTargets="Build">
-    <Copy
-      SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb"
-      DestinationFolder="$(TargetDir)plugins" />
-    <Copy
-      SourceFiles="@(NAudioFiles)"
-      DestinationFolder="$(TargetDir)plugins/lib" />
+    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb" DestinationFolder="$(TargetDir)plugins" />
+    <Copy SourceFiles="@(NAudioFiles)" DestinationFolder="$(TargetDir)plugins/lib" />
   </Target>
 </Project>

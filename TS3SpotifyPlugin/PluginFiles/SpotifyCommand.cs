@@ -417,9 +417,9 @@ public class SpotifyCommand : IBotPlugin
 
         string filePath;
 
-		private string args = " -b 160 --enable-volume-normalisation --initial-volume 100 --backend pipe";
+		private string args = " -b 160 --enable-volume-normalisation --initial-volume 100 --backend pipe --dither tpdf_hp --format S16 --autoplay";
 
-        private string defaultArgs = " -b 160 --enable-volume-normalisation --initial-volume 100 --backend pipe";
+        private string defaultArgs = " -b 160 --enable-volume-normalisation --initial-volume 100 --backend pipe --dither tpdf_hp --format S16 --autoplay";
 
         public SpotifyInstance(SpotifyPluginConfig config, SpotifyAccount account)
 		{
