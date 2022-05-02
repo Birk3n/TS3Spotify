@@ -242,16 +242,14 @@ public class SpotifyCommand : IBotPlugin
         if (OperatingSystem.IsWindows())
         {
             informChannel(Ts3Client, "Windows Version");
+            
 
-
-            // Winwdows currently not working 
             Task.Factory.StartNew(() =>
             {
-                //Starting a Task bc WaitForConnection blocks execution
-                var stream = new NamedPipeServerStream(spotifyPluginConfig.getPipeName(), PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.None);
+                var stream = new NamedPipeServerStream(spotifyPluginConfig.getPipeName(), PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.None);
                 stream.WaitForConnection();
                 producer = new SpotifyStreamAudioProducer(stream, player, rootConf);
-
+                producer.start();
             });
 
 
@@ -267,6 +265,7 @@ public class SpotifyCommand : IBotPlugin
             }
             FileStream s = new FileStream("/tmp/" + spotifyPluginConfig.getPipeName(), FileMode.Open);
             producer = new SpotifyStreamAudioProducer(s, player, rootConf);
+            producer.start();
         }
 
         spotifyInstance = new SpotifyInstance(spotifyPluginConfig, activeSpotifyAccount);
@@ -281,21 +280,12 @@ public class SpotifyCommand : IBotPlugin
 
         if (!spotifyInstance.connected || spotifyInstance.hasExited())
         {
+            spotifyInstance.stopProcess();
+            producer?.Dispose();
             return false;
         }
 
         targetManager.SendMode = TargetSendMode.Voice;
-
-        tries = 0;
-        while (producer == null && tries++ < 10)
-        {
-            informChannel(Ts3Client, "Waiting for NamedPipe");
-            Thread.Sleep(1000);
-        }
-
-        if (producer == null) return false;
-
-        producer.start();
 
         return true;
     }
